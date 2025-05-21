@@ -32,6 +32,16 @@ services:
     volumes:
       - mongodbdata:/data
 
+  chroma:
+    image: ghcr.io/chroma-core/chroma:0.5.13
+    hostname: gateway
+    volumes:
+      - index_data:/index_data
+    ports:
+      - "9000:9000"
+    networks:
+      - net
+
   gateway:
     image: nginx:1.13.3-alpine
     hostname: gateway
@@ -45,3 +55,9 @@ services:
 
 volumes:
   mongodbdata:
+  index_data:
+    driver: local
+
+networks:
+  net:
+    driver: bridge

@@ -12,6 +12,7 @@ from app.admin.train.routes import router as train_router
 from app.admin.test.routes import router as test_router
 from app.admin.integrations.routes import router as integrations_router
 from app.admin.chatlogs.routes import router as chatlogs_router
+from app.admin.knowledge_base.routes import router as knowledge_base_router
 
 
 from app.bot.channels.rest.routes import router as rest_router
@@ -57,6 +58,7 @@ admin_router.include_router(train_router)
 admin_router.include_router(test_router)
 admin_router.include_router(integrations_router)
 admin_router.include_router(chatlogs_router)
+admin_router.include_router(knowledge_base_router)
 
 
 app.include_router(admin_router)

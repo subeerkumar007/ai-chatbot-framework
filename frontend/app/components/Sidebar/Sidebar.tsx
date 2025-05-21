@@ -6,6 +6,7 @@ import logo from "@/public/images/logo.png";
 import {
   BeakerIcon,
   TagIcon,
+  BookOpenIcon,
   ChatBubbleLeftRightIcon,
   Cog6ToothIcon,
   CircleStackIcon,
@@ -19,6 +20,7 @@ const Sidebar = () => {
   const menuItems = [
     { label: "Intents", icon: BeakerIcon, path: "/admin/intents" },
     { label: "Entities", icon: TagIcon, path: "/admin/entities" },
+    { label: "Knowledge Base", icon: BookOpenIcon, path: "/admin/knowledge-base" },
     { label: "Chat", icon: ChatBubbleLeftRightIcon, path: "/admin/chat" },
     { label: "Logs", icon: ClipboardDocumentListIcon, path: "/admin/chatlogs" },
   ];

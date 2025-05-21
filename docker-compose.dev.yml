@@ -6,6 +6,16 @@ services:
     hostname: mongodb
     volumes:
       - mongodbdata:/data
+      
+  chroma:
+    image: ghcr.io/chroma-core/chroma:0.5.13
+    hostname: gateway
+    volumes:
+      - index_data:/index_data
+    ports:
+      - "8000:8000"
+    networks:
+      - net
 
   app:
     build:
