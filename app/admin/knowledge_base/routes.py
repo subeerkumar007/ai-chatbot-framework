@@ -5,25 +5,24 @@ from typing import Annotated
 
 router = APIRouter(prefix="/knowledge-base", tags=["knowledge-base"])
 
+
 @router.post("/documents")
 async def upload_document(
     document_title: Annotated[str, Form()],
     document_type: Annotated[str, Form()],
     document_content: Annotated[str, Form()],
-    file: UploadFile = File(None)
+    file: UploadFile = File(None),
 ):
     """Upload a document to the knowledge base"""
     if not document_content and not file:
         raise HTTPException(
-            status_code=400,
-            detail="Either content or file must be provided"
+            status_code=400, detail="Either content or file must be provided"
         )
-
 
     document = KnowledgeBaseDocument(
         document_title=document_title,
         document_type=document_type,
-        document_content=document_content
+        document_content=document_content,
     )
 
     # If file is provided,store it in object store
@@ -35,7 +34,6 @@ async def upload_document(
         file_id = store.upload_document_file(content)
         document.object_store_id = file_id
 
-
     # TODO: Implement vector store integration
     # placeholder for vector store integration
     # vector_store_id = await vector_store.add_document(content)
@@ -43,15 +41,18 @@ async def upload_document(
 
     return await store.add_document(document.model_dump(exclude={"id": True}))
 
+
 @router.get("/documents")
 async def list_documents():
     """List all documents in the knowledge base"""
     return await store.list_documents()
 
+
 @router.get("/documents/{document_id}")
 async def get_document(document_id: str):
     """Get a document from the knowledge base"""
     return await store.get_document(document_id)
+
 
 @router.delete("/documents/{document_id}")
 async def delete_document(document_id: str):

@@ -1,18 +1,28 @@
 import tempfile
 from typing import List
 from langchain.schema import Document
-from langchain.document_loaders import TextLoader, PyPDFLoader, UnstructuredWordDocumentLoader
+from langchain.document_loaders import (
+    TextLoader,
+    PyPDFLoader,
+    UnstructuredWordDocumentLoader,
+)
 from app.admin.knowledge_base.schemas import KnowledgeBaseDocument
+
 
 class KnowledgeBasePreprocessor:
     """Handles preprocessing of documents for the knowledge base."""
 
-    SUPPORTED_TYPES = ['text/plain', 'application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document']
+    SUPPORTED_TYPES = [
+        "text/plain",
+        "application/pdf",
+        "application/msword",
+        "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    ]
 
     DOC_LOADER_MAPPING = {
-        'text/plain': TextLoader,
-        'application/pdf': PyPDFLoader,
-        'application/msword': UnstructuredWordDocumentLoader,
+        "text/plain": TextLoader,
+        "application/pdf": PyPDFLoader,
+        "application/msword": UnstructuredWordDocumentLoader,
     }
 
     @staticmethod
@@ -29,16 +39,16 @@ class KnowledgeBasePreprocessor:
 
         for doc in documents:
             # Process based on document type
-            if doc.document_type == 'text/plain':
+            if doc.document_type == "text/plain":
                 # Process text directly
                 processed_docs.append(
                     Document(
                         page_content=doc.content,
                         metadata={
-                            'source': doc.source,
-                            'title': doc.title,
-                            'doc_id': str(doc.id)
-                        }
+                            "source": doc.source,
+                            "title": doc.title,
+                            "doc_id": str(doc.id),
+                        },
                     )
                 )
             elif doc.content_type in SUPPORTED_TYPES:
@@ -67,15 +77,11 @@ class KnowledgeBasePreprocessor:
         loader = self.DOC_LOADER_MAPPING[doc.content_type](temp_file_path)
 
         loaded_docs = loader.load()
-        
+
         # Add metadata to each page/section
         for loaded_doc in loaded_docs:
-            loaded_doc.metadata.update({
-                'source': doc.source,
-                'title': doc.title,
-                'doc_id': str(doc.id)
-            })
+            loaded_doc.metadata.update(
+                {"source": doc.source, "title": doc.title, "doc_id": str(doc.id)}
+            )
             processed_docs.append(loaded_doc)
         return processed_docs
-
-    
